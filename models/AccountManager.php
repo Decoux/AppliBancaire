@@ -29,7 +29,7 @@ class AccountManager
      *
      * @return  self
      */ 
-    public function setDb($db)
+    public function setDb(PDO $db)
     {
         $this->_db = $db;
 

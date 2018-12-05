@@ -47,7 +47,7 @@ class Account
      *
      * @return  self
      */ 
-    public function setName($name)
+    public function setName(string $name)
     {
     $this->name = $name;
 
@@ -69,6 +69,7 @@ class Account
      */ 
     public function setBalance($balance)
     {
+        $balance = intval($balance);
         $this->balance = $balance;
 
         return $this;
@@ -89,6 +90,7 @@ class Account
      */ 
     public function setId($id)
     {
+        $id = intval($id);
         $this->id = $id;
 
         return $this;
