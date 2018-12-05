@@ -1,1 +1,1 @@
-# AppliBancaire
+# AppliBancaire by Paul Decoux 
