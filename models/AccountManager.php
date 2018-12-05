@@ -36,6 +36,12 @@ class AccountManager
         return $this;
     }
 
+    /**
+     * Add accout in database
+     *
+     * @param Account $account
+     * @return void
+     */
     public function addAccount(Account $account){
         $req = $this-> getDb()->prepare('INSERT INTO accounts(name, balance) VALUES (:name, :balance)');
         $req->bindValue(':name', $account->getName(), PDO::PARAM_STR);
@@ -43,6 +49,11 @@ class AccountManager
         $req->execute();
     }
 
+    /**
+     * Get all accout from database
+     *
+     * @return void
+     */
     public function getAccounts(){
         $arrayOfAccount = [];
         $req = $this->getDb()->query('SELECT * FROM accounts');
@@ -87,6 +98,13 @@ class AccountManager
         $req->execute();
     }
 
+    /**
+     * function dept foudns, calcul and update in database
+     *
+     * @param Account $account
+     * @param integer $balancePost
+     * @return void
+     */
     public function deptFounds(Account $account, int $balancePost)
     {
         $req = $this->getDb()->prepare('UPDATE accounts SET balance = balance - :balance WHERE id = :id');
@@ -95,6 +113,12 @@ class AccountManager
         $req->execute();
     }
 
+    /**
+     * Function get account by id in database
+     *
+     * @param string $name
+     * @return void
+     */
     public function getAccountByName(string $name)
     {
         $req = $this->getDb()->prepare('SELECT * FROM accounts WHERE name = :name');
@@ -105,6 +129,13 @@ class AccountManager
 
     }
 
+     /**
+      * function dept fouds for transfer founds and update in database
+      *
+      * @param Account $account
+      * @param integer $balancePost
+      * @return void
+      */
     public function transferDeptFounds(Account $account, int $balancePost){
         $req = $this->getDb()->prepare('UPDATE accounts SET balance = balance - :balance WHERE id = :id');
         $req->bindValue(':balance', $balancePost, PDO::PARAM_INT);
@@ -112,6 +143,13 @@ class AccountManager
         $req->execute();
     }
 
+    /**
+     * function credit founds after transfer and update in database
+     *
+     * @param Account $account
+     * @param integer $balancePost
+     * @return void
+     */
     public function tranferCreditFounds(Account $account, int $balancePost){
         $req = $this->getDb()->prepare('UPDATE accounts SET balance = balance + :balance WHERE id = :id');
         $req->bindValue(':balance', $balancePost, PDO::PARAM_INT);
@@ -119,6 +157,12 @@ class AccountManager
         $req->execute();
     }
 
+    /**
+     * function delete account in database
+     *
+     * @param Account $account
+     * @return void
+     */
     public function deleteAccount(Account $account){
         $req = $this->getDb()->prepare('DELETE FROM accounts WHERE id = :id');
         $req->bindValue(':id', $account->getId() , PDO::PARAM_INT);

@@ -75,11 +75,13 @@ if(isset($_POST['delete'])){
     /**
      * Delete account from db
      */
-     $getAccountFromDelete = $manager->getAccountById($_POST['id']);
-
-     $manager->deleteAccount($getAccountFromDelete);
+    $getAccountFromDelete = $manager->getAccountById($_POST['id']);
+    $manager->deleteAccount($getAccountFromDelete);
 }
 
+/**
+ * display all accounts from database
+ */
 $getAccounts = $manager->getAccounts();
 
 include "../views/indexView.php";
