@@ -19,7 +19,7 @@ include('includes/header.php');
         <label for="">Email : </label>
         <input class="form-control" type="text" name="email">
         <label for="">Mot de passe : </label>
-        <input class="form-control" type="text" name="pass">
+        <input class="form-control" type="password" name="pass">
         <button type="submit" class="text-white btn bg-fa8072 mt-5">S'inscrire</button>
     </form>
     

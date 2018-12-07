@@ -31,11 +31,18 @@ $types = ["PEL", "Compte courant", "Livret A", "Compte joint"];
 if(isset($_POST['new'])){
     $account = new Account([
         "name" => $_POST['name'],
-        "balance" => 80
+        "balance" => 80,
+        "iduser"=>$_SESSION['id']
     ]);
-    $manager->addAccount($account);
+    $getAccountByName = $manager->getAccountByName($account);
+    if(empty($getAccountByName)){
+        $manager->addAccount($account);
+    }else{
+        echo 'Vous possedez déja ce type de compte';
+    }
 }
 
+// print_r($listOfAccount);
 /**
  * Add Founds on account
  */

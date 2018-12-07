@@ -111,7 +111,7 @@ class AccountManager
      * @param integer $balancePost
      * @return void
      */
-    public function deptFounds(Account $account, int $balancePost)
+    public function deptFounds(Account $account, $balancePost)
     {
         $req = $this->getDb()->prepare('UPDATE accounts SET balance = balance - :balance WHERE id = :id');
         $req->bindValue(':balance', $balancePost, PDO::PARAM_INT);
@@ -125,10 +125,12 @@ class AccountManager
      * @param string $name
      * @return void
      */
-    public function getAccountByName(string $name)
+    public function getAccountByName(Account $account)
     {
-        $req = $this->getDb()->prepare('SELECT * FROM accounts WHERE name = :name');
-        $req->bindValue(':name', $name, PDO::PARAM_STR);
+        $req = $this->getDb()->prepare('SELECT * FROM accounts WHERE name = :name AND iduser = :iduser');
+        $req->bindValue(':name', $account->getName(), PDO::PARAM_STR);
+        $req->bindValue(':iduser', $account->getIduser(), PDO::PARAM_STR);
+
         $req->execute();
         $data_account = $req->fetch();
         return $data_account;

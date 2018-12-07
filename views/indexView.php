@@ -18,7 +18,7 @@ include('includes/header.php');
         <label for="">Email : </label>    
         <input name="email" class="form-control" type="text">
         <label for="">Mot de passe : </label>
-        <input name="pass" class="form-control" type="text">
+        <input name="pass" class="form-control" type="password">
         <button type="submit" class="text-white btn bg-fa8072 mt-5">Se connecter</button>
         <div class="input-group mb-3 mt-3">
             <div class="input-group-prepend">

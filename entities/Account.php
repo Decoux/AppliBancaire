@@ -6,6 +6,7 @@ class Account
 {
     protected   $id,
                 $name,
+                $iduser,
                 $balance;
 
     /**
@@ -94,5 +95,25 @@ class Account
         $this->id = $id;
 
         return $this;
+    }
+
+    /**
+     * Get the value of iduser
+     */ 
+    public function getIduser()
+    {
+            return $this->iduser;
+    }
+
+    /**
+     * Set the value of iduser
+     *
+     * @return  self
+     */ 
+    public function setIduser($iduser)
+    {
+            $this->iduser = $iduser;
+
+            return $this;
     }
 }

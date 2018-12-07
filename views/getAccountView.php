@@ -69,7 +69,7 @@ include('includes/header.php');
 						<label for="">Sélectionner un compte pour le virement</label>
 						<select name="idPayment" required>
 							<option value="" disabled>Choisir un compte</option>
-							<?php foreach ($getAccounts as $key => $accountName) { ?>
+							<?php foreach ($getAccounts as $accountName) { ?>
 								<option value="<?php echo $accountName->getId(); ?>"><?php echo $accountName->getName(); ?></option>
 							<?php } 
 							?>
