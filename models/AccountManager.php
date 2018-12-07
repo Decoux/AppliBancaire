@@ -43,9 +43,12 @@ class AccountManager
      * @return void
      */
     public function addAccount(Account $account){
-        $req = $this-> getDb()->prepare('INSERT INTO accounts(name, balance) VALUES (:name, :balance)');
+        $req = $this-> getDb()->prepare('INSERT INTO accounts(name, balance, iduser) VALUES (:name, :balance, :iduser)');
         $req->bindValue(':name', $account->getName(), PDO::PARAM_STR);
         $req->bindValue(':balance', $account->getBalance(), PDO::PARAM_STR);
+        $req->bindValue(':iduser', $_SESSION['id'], PDO::PARAM_STR);
+
+
         $req->execute();
     }
 
@@ -54,9 +57,12 @@ class AccountManager
      *
      * @return void
      */
-    public function getAccounts(){
+    public function getAccountsByIdUser(){
         $arrayOfAccount = [];
-        $req = $this->getDb()->query('SELECT * FROM accounts');
+        $req = $this->getDb()->prepare('SELECT * FROM accounts WHERE iduser = :iduser');
+        $req->bindValue(':iduser', $_SESSION['id'], PDO::PARAM_STR);
+        $req->execute();
+
         $data_accounts = $req->fetchAll(PDO::FETCH_ASSOC);
         if (!empty($data_accounts)) {
             foreach ($data_accounts as $account) {
@@ -169,6 +175,11 @@ class AccountManager
         $req->execute();
 
     }
-
+    
+    public function getAccountByIdUser($id_user){
+        $req = $this->getDb()->prepare('SELECT * FROM accounts WHERE iduser = :iduser');
+        $req->bindValue(':id', $account->getId(), PDO::PARAM_INT);
+        
+    }
 
 }

@@ -1,14 +1,11 @@
 <?php
-
+session_start();
 // On enregistre notre autoload.
 function chargerClasse($classname)
 {
-    if(file_exists('../models/'. $classname.'.php'))
-    {
-        require '../models/'. $classname.'.php';
-    }
-    else 
-    {
+    if (file_exists('../models/' . $classname . '.php')) {
+        require '../models/' . $classname . '.php';
+    } else {
         require '../entities/' . $classname . '.php';
     }
 }
@@ -19,69 +16,53 @@ spl_autoload_register('chargerClasse');
  */
 $db = Database::DB();
 
-$manager = new AccountManager($db);
-/**
- * Create array for dynamique display select
- */
-$types = ["PEL", "Compte courant", "Livret A", "Compte joint"];
-
-/**
- * if $_POST['new'] is defined we create object
- */
-if(isset($_POST['new'])){
-    $account = new Account([
-        "name" => $_POST['name'],
-        "balance" => 80
-    ]);
-    $manager->addAccount($account);
+$userManager = new UserManager($db);
+if (isset($_POST['email'])){
+    if(!empty($_POST['email'])){
+        if($userManager->getUserByEmail($_POST['email'])== TRUE){
+        
+            if(!empty($_POST['pass'])){
+                $hash_pass = password_hash($_POST['pass'], PASSWORD_DEFAULT);
+                $user = new User([
+                    'email' => $_POST['email'],
+                    'pass'=>$hash_pass
+                ]);
+                $data_user = $userManager->getObjectUserByEmail($user);
+                    if(password_verify($_POST['pass'], $data_user->getPass())==TRUE){
+                        $_SESSION['id'] = $data_user->getId();
+                        $_SESSION['name'] = $data_user->getName();
+                        
+                    }else{
+                        echo 'Le mot de passe est incorrecte';
+                    }
+                }else{
+                    echo 'Veuillez renseigner votre mot de passe';
+                }
+            }else{
+                echo 'Veuillez vous inscrire';
+            }
+        }else{
+        echo 'Veuillez renseigner votre adresse email';
+    }
+}
+if (isset($_POST['connexion_auto'])) {
+    setcookie('email', $_POST['email'], time() + 365 * 24 * 3600, null, null, false, true);
+    setcookie('pass', password_hash($_POST['pass'], PASSWORD_DEFAULT), time() + 365 * 24 * 3600, null, null, false, true);
 }
 
-/**
- * Add Founds on account
- */
-if(isset($_POST['payment'])){
-    $getAccountById = $manager->getAccountById($_POST['id']);
-    $addFounds = $manager->creditFounds($getAccountById, $_POST['balance']);
-    
+if(isset($_SESSION['id'])){
+    header('Location: getAccount.php');
 }
 
-/**
- * delete founds on account
- */
-if (isset($_POST['debit'])) {
-    $getAccountById = $manager->getAccountById($_POST['id']);
-    $addFounds = $manager->deptFounds($getAccountById, $_POST['balance']);
+if(isset($_POST['deconnexion'])){
+    // Suppression des variables de session et de la session
+    $_SESSION = array();
+    session_destroy();
+
+    // Suppression des cookies de connexion automatique
+
+    setcookie('email', '');
+    setcookie('pass', '');
+    header('Location: index.php');
 }
-
-/**
- * tranfer founds on account
- */
-if(isset($_POST['transfer'])){
-    /**
-     * delete founds after transfer
-     */
-    $getAccountByIdDeleteFounds = $manager->getAccountById($_POST['idDebit']);
-    $manager->transferDeptFounds($getAccountByIdDeleteFounds, $_POST['balance']);
-
-    /**
-     * credit founds after transfer
-     */
-    $getAccountByIdAddFounds = $manager->getAccountById($_POST['idPayment']);
-    $manager->tranferCreditFounds($getAccountByIdAddFounds, $_POST['balance']);
-    
-}
-
-if(isset($_POST['delete'])){
-    /**
-     * Delete account from db
-     */
-    $getAccountFromDelete = $manager->getAccountById($_POST['id']);
-    $manager->deleteAccount($getAccountFromDelete);
-}
-
-/**
- * display all accounts from database
- */
-$getAccounts = $manager->getAccounts();
-
 include "../views/indexView.php";

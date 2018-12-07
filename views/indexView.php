@@ -4,93 +4,38 @@ include('includes/header.php');
 
 ?>
 
-<div class="container">
-
-	<header class="flex">
+    <header class="flex">
 		<p class="margin-right">Bienvenue sur l'application Comptes Bancaires</p>
-	</header>
-
-	<h1>Mon application bancaire</h1>
-
-	<form class="newAccount" action="../controllers/index.php" method="post">
-		<label>Sélectionner un type de compte</label>
-		<select class="" name="name" required>
-			<option value="" disabled>Choisissez le type de compte à ouvrir</option>
-			<?php for($i=0; $i < count($types); $i++){ ?>
-				<option value="<?php echo $types[$i]; ?>"><?php echo $types[$i]; ?></option>
-			<?php } ?>
-		</select>
-		<input type="submit" name="new" value="Ouvrir un nouveau compte">
-	</form>
-
-	<hr>
-
-	<div class="main-content flex">
-
-	<!-- Pour chaque compte enregistré en base de données, il faudra générer le code ci-dessous -->
-
-	<?php if($getAccounts){
-			
-			foreach($getAccounts as $key => $account){ ?>
-
-		<div class="card-container">
-			
-			<div class="card">
-				<?php if ($account->getBalance() < 0) { ?><p class="error-message"><?php echo 'Vous etes en debit'; ?></p><?php } ?>
-				<h3><strong><?php echo $account->getName(); ?></strong></h3>
-				<div class="card-content">
-
-
-					<p>Somme disponible : <?php echo $account->getBalance(); ?> €</p>
-
-					<!-- Formulaire pour dépot/retrait -->
-					<h4>Dépot / Retrait</h4>
-					<form action="index.php" method="post">
-						<input type="hidden" name="id" value=" <?php echo $account->getId(); ?>"  required>
-						<label>Entrer une somme à débiter/créditer</label>
-						<input type="number" name="balance" placeholder="Ex: 250" required>
-						<input type="submit" name="payment" value="Créditer">
-						<input type="submit" name="debit" value="Débiter">
-					</form>
-
-
-					<!-- Formulaire pour virement -->
-			 		<form action="index.php" method="post">
-
-						<h4>Transfert</h4>
-						<label>Entrer une somme à transférer</label>
-						<input type="number" name="balance" placeholder="Ex: 300"  required>
-						<input type="hidden" name="idDebit" value="<?php echo $account->getId(); ?>" required>
-						<label for="">Sélectionner un compte pour le virement</label>
-						<select name="idPayment" required>
-							<option value="" disabled>Choisir un compte</option>
-							<?php foreach ($getAccounts as $key => $accountName) { ?>
-								<option value="<?php echo $accountName->getId(); ?>"><?php echo $accountName->getName(); ?></option>
-							<?php } 
-							?>
-						</select>
-						<input type="submit" name="transfer" value="Transférer l'argent">
-					</form>
-
-					<!-- Formulaire pour suppression -->
-			 		<form class="delete" action="index.php" method="post">
-				 		<input type="hidden" name="id" value="<?php echo $account->getId(); ?>"  required>
-				 		<input type="submit" name="delete" value="Supprimer le compte">
-			 		</form>
-
-				</div>
-			</div>
-		</div>
-
-	<?php }
+        <?php if (isset($_SESSION['id'])) { ?>
+		<form action="index.php" method="post">
+			<input type="submit" value="Deconnexion" class="btn btn-danger">
+		</form> 
+	<?php 
 } ?>
-
-	</div>
-
+    </header>
+<div class="container">
+    <form class="col-md-5 border border-dark rounded p-5 mt-5 mx-auto d-flex flex-column" action="index.php" method="post">
+        <label for="">Email : </label>    
+        <input name="email" class="form-control" type="text">
+        <label for="">Mot de passe : </label>
+        <input name="pass" class="form-control" type="text">
+        <button type="submit" class="text-white btn bg-fa8072 mt-5">Se connecter</button>
+        <div class="input-group mb-3 mt-3">
+            <div class="input-group-prepend">
+                <div class="input-group-text">
+                <input name="connexion_auto" type="checkbox" aria-label="Checkbox for following text input">
+            
+                </div>
+            </div>
+            <input value="Connexion automatique" type="text" class="text-center form-control" aria-label="Text input with checkbox">
+        </div>
+    </form>
+    <a class="d-flex justify-content-center" href="registration.php">
+        <input name="registration" class="col-md-4 text-white btn bg-fa8072 mt-5" type="submit" value="S'inscrire">
+    </a>
 </div>
-
 <?php
 
 include('includes/footer.php');
 
- ?>
+?>
